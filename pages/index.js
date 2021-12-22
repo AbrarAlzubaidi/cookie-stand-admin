@@ -1,62 +1,38 @@
-import Head from 'next/head'
 import { useState } from 'react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import Form from '../components/Form'
-import Table from '../components/Table'
+import axios from 'axios';
+import CookieStandAdmin from '../components/CookieStandAdmin'
+import LoginForm from '../components/LoginForm'
 
-const App =()=> {
-  const[hours,setHours]=useState(['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'])
-  const[totals,setTotals]=useState([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0])
-  const [stand, setstore] = useState([])
+const userData=''
+const URL = 'http://127.0.0.1:8000/';
+const tokenURL = URL + 'api/token/';
+const refreshToken = URL+'api/token/refresh'
 
-  const formHandler = (e) =>{
-    e.preventDefault();
-    let min=e.target.min.value
-    let max=e.target.max.value
-    let avg=e.target.avg.value
-    
-    let sum=0
-   
-    
-    const store= {
-      location: e.target.location.value,
-      hourSales:hours.map(()=>Math.ceil(avg*(Math.ceil(Math.random()*(max-min)+min)))),
-    }
+const App = () => {
+  // if user logged in show cookie stand admin component
+  // else show login form component
+  const [token, setToken] = useState('')
+  const [refreshToken, setRefreshToken] =useState('')
 
-    for (let i=0; i< store.hourSales.length; i++){
-      sum=sum+store.hourSales[i]
-    }
-    store.total=sum
-    
-    setstore([...stand,store])
-  
-
-    let total_sum=totals.map((item,index)=>{
-      if (index===totals.length-1){
-        return item + store.total
-      }
-     return item + store.hourSales[index]
-  })
-   
-  setTotals(total_sum)
-    
+  const loginHandler = async (user_data)=>{
+    userData= user_data
+    const resToken = await axios.post(tokenURL,user_data)
+    setToken(resToken.data.access)
+    setRefreshToken(resToken.data.refresh)
   }
-  return (
-    <div className='bg-cyan-50'>
-      <Head>
-        <title>Salmon Cookie Stand</title>
-        <link rel="icon" href="https://cdn-icons-png.flaticon.com/128/4090/4090590.png" />
-      </Head>
-      <Header/>
-      <main >
-        <Form formHandler = {formHandler}/>
-        <Table stand={stand} hours={hours} totals={totals}/>
-      </main>
-      <Footer stand={stand}/>
 
-      
-    </div>
+  const signoutHandler =()=>{
+    setToken('')
+  }
+
+  //  if token not found show login page
+  if (!token) return <LoginForm loginHandler={loginHandler}/>
+
+  return (
+    <>
+      {/* token found show cookie stand pag */}
+      <CookieStandAdmin token={token} signoutHandler={signoutHandler} userData={userData}/>
+    </>
   )
 }
 export default App
