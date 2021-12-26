@@ -1,2 +1,3 @@
 ## deployment URL
-https://cookie-stand-api.herokuapp.com
+bachend:  https://cookie-stand-api.herokuapp.com/
+frontend:   https://cookie-stand-admin-gray.vercel.app/
