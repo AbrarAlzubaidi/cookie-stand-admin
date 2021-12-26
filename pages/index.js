@@ -1,38 +1,37 @@
-import { useState } from 'react'
-import axios from 'axios';
-import CookieStandAdmin from '../components/CookieStandAdmin'
-import LoginForm from '../components/LoginForm'
+import axios from "axios";
+import { useState } from "react";
 
-const userData=''
-const URL = 'http://127.0.0.1:8000/';
-const tokenURL = URL + 'api/token/';
-const refreshToken = URL+'api/token/refresh'
+import CookieStandAdmin from "../components/CookieStandAdmin"
+import LoginForm from "../components/LoginForm"
 
-const App = () => {
-  // if user logged in show cookie stand admin component
-  // else show login form component
-  const [token, setToken] = useState('')
-  const [refreshToken, setRefreshToken] =useState('')
+const baseUrl = process.env.NEXT_PUBLIC_COOKIE_STAND_API;
+const tokenUrl= baseUrl +'api/token/';
+const refreshToken= baseUrl + 'api/token/refresh';
 
-  const loginHandler = async (user_data)=>{
-    userData= user_data
-    const resToken = await axios.post(tokenURL,user_data)
-    setToken(resToken.data.access)
-    setRefreshToken(resToken.data.refresh)
+
+export default function Home(props){
+
+  const [token, setToken] = useState('');
+  const [refreshToken, setRefreshToken] = useState('');
+
+  async function getToken(credentials){
+    const fetchedToken = await axios.post(tokenUrl, credentials);
+    setToken(fetchedToken.data.access);
+    setRefreshToken(fetchedToken.data.refresh);
   }
 
-  const signoutHandler =()=>{
+  function signouthandler(){
     setToken('')
   }
 
-  //  if token not found show login page
-  if (!token) return <LoginForm loginHandler={loginHandler}/>
 
-  return (
-    <>
-      {/* token found show cookie stand pag */}
-      <CookieStandAdmin token={token} signoutHandler={signoutHandler} userData={userData}/>
-    </>
-  )
+  function loginHandler(credentials){
+    getToken(credentials)
+  }
+
+  
+  if (token) return <CookieStandAdmin  token={token} signouthandler={signouthandler} />
+ 
+  return  <LoginForm loginHandler={loginHandler} />
+
 }
-export default App

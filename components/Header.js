@@ -6,7 +6,7 @@ const Header=(props)=>{
         <h1 className='text-4xl font-medium text-white '>Cookie Stand Admin</h1>
         <div className="flex items-center w-1/3 justify-cneter">
             <h2 className="p-1 mr-2 text-white">{props.userData.username} </h2>
-            <form onSubmit={props.signoutHandler}>
+            <form onSubmit={props.signouthandler}>
               <button className="p-1 mr-2 text-white rounded bg-cyan-700">Sign Out</button>
             </form>
         <Link  href='/overview'>

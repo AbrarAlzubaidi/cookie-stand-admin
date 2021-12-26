@@ -21,13 +21,13 @@ const Table=(props)=>{
         
           <tbody>
           {
-            props.stand.map((store,idx)=>{
+            props.report.map((store,idx)=>{
               
               const element =
               <>
                 <td className='px-2 border border-cyan-800' >{store.location}</td>
                 {
-                  store.hourSales.map(item=>{
+                  store.hourlySales.map(item=>{
                     return(
                       <td className='border border-cyan-800'> {item} </td>
                     )

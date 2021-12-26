@@ -15,21 +15,22 @@ function LoginForm(props) {
             username: username,
             password: password
         })
-        
-        
     }
+    
     const usernameHandler =(e)=>{
         e.preventDefault()
         username = e.target.value
         console.log(username)
         setUserName(username)
     }
+    
     const passwordHandler =(e)=>{
         e.preventDefault()
         password = e.target.value
         console.log(password)
         setPassword(password)
     }
+    
     return (
         <div>
             <Head>
@@ -53,5 +54,4 @@ function LoginForm(props) {
         </div>
     )
 }
-
 export default LoginForm
